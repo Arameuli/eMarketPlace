@@ -1,7 +1,10 @@
 package com.example.emarket.controller;
 
+import com.example.emarket.dto.PostCollectionDto;
+import com.example.emarket.dto.PostDto;
 import com.example.emarket.model.Post;
 import com.example.emarket.service.PostService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +22,29 @@ public class PostController {
 
     @GetMapping
     @ResponseBody
-    public List<Post> getAllPosts(){
-        return postService.getPosts();
+    public PostCollectionDto getAllPosts(){
+        try{
+            return postService.getPosts();
+        }
+        catch (EntityNotFoundException e) {
+            return null;
+        }
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Post getPostByid(@PathVariable("id") Integer id){
-        return postService.getPostByid(id);
+    public PostDto getPostByid(@PathVariable("id") Integer id){
+        try{
+            return postService.getPost(id);
+        }
+        catch (EntityNotFoundException e) {
+            return null;
+        }
     }
 
     @PostMapping
     @ResponseBody
-    public Post addPost(@RequestBody Post post){
+    public PostDto addPost(@RequestBody Post post){
         return postService.addPost(post);
     }
 }

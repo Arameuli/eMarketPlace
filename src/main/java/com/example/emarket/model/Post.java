@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.nio.channels.FileChannel;
 import java.util.Date;
 
 @Entity
