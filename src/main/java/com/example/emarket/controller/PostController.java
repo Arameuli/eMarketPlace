@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,7 @@ public class PostController {
     @PostMapping
     @ResponseBody
     public PostDto addPost(@RequestBody Post post){
+        post.setPost_date(new Date());
         return postService.addPost(post);
     }
 }

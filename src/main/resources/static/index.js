@@ -6,29 +6,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentPage = 1;
     const postsPerPage = 6;
+    let allPosts = [];
+
+    async function fetchPosts() {
+        try {
+            const response = await fetch('/post');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            allPosts = data.postDtoList || [];
+            renderPosts();
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
 
     function renderPosts() {
         postsContainer.innerHTML = '';
 
-        const posts = JSON.parse(localStorage.getItem('posts')) || [];
         const startIndex = (currentPage - 1) * postsPerPage;
         const endIndex = startIndex + postsPerPage;
-        const paginatedPosts = posts.slice(startIndex, endIndex);
+        const paginatedPosts = allPosts.slice(startIndex, endIndex);
 
         paginatedPosts.forEach(post => {
             const postElement = document.createElement('div');
             postElement.className = 'post';
             postElement.innerHTML = `
                 <h3>${post.title}</h3>
-                <img src="${post.imageUrl}" alt="Post Image">
-                <p>${post.description}</p>
+                <img src="${post.photo_url || 'default-image.jpg'}" alt="Post Image">
+                <p>${post.discription}</p>
+                <small>${new Date(post.date).toLocaleString()}</small>
             `;
             postsContainer.appendChild(postElement);
         });
 
         pageNumberSpan.textContent = currentPage;
         prevPageBtn.disabled = currentPage === 1;
-        nextPageBtn.disabled = endIndex >= posts.length;
+        nextPageBtn.disabled = endIndex >= allPosts.length;
     }
 
     prevPageBtn.addEventListener('click', function() {
@@ -39,12 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     nextPageBtn.addEventListener('click', function() {
-        const posts = JSON.parse(localStorage.getItem('posts')) || [];
-        if (currentPage * postsPerPage < posts.length) {
+        if (currentPage * postsPerPage < allPosts.length) {
             currentPage++;
             renderPosts();
         }
     });
 
-    renderPosts();
+    fetchPosts();
 });
