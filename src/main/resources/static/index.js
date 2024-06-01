@@ -1,4 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isGuest = urlParams.get('guest');
+
+    if (isGuest === 'true') {
+        document.querySelector('.profile-name').textContent = 'Guest';
+        document.querySelector('.add-post').innerHTML = `<button onclick="window.location.href='logReg.html'">Login/Register</button>`;
+    }
     const postsContainer = document.getElementById('postsContainer');
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
@@ -30,11 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const paginatedPosts = allPosts.slice(startIndex, endIndex);
 
         paginatedPosts.forEach(post => {
+            var src = post.photo_url + ".jpg";
             const postElement = document.createElement('div');
             postElement.className = 'post';
             postElement.innerHTML = `
                 <h3>${post.title}</h3>
-                <img src="http://localhost:8080/${post.photo_url || 'default-image.jpg'}" alt="Post Image">
+                <img src="http://localhost:8080/${src || 'default-image.jpg'}" alt="Post Image">
                 <p>${post.discription}</p>
                 <small>${new Date(post.date).toLocaleString()}</small>
             `;
@@ -45,14 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
         nextPageBtn.disabled = endIndex >= allPosts.length;
     }
 
-    prevPageBtn.addEventListener('click', function() {
+    prevPageBtn.addEventListener('click', function () {
         if (currentPage > 1) {
             currentPage--;
             renderPosts();
         }
     });
 
-    nextPageBtn.addEventListener('click', function() {
+    nextPageBtn.addEventListener('click', function () {
         if (currentPage * postsPerPage < allPosts.length) {
             currentPage++;
             renderPosts();
