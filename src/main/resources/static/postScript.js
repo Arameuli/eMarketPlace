@@ -3,41 +3,38 @@ document.getElementById('postForm').addEventListener('submit', function(event) {
 
     const title = document.getElementById('title').value;
     const fileInput = document.getElementById('file');
+    var photo=document.getElementById('file').files[0];
     const description = document.getElementById('description').value;
 
     const reader = new FileReader();
-    reader.onload = function(e) {
-        // const imageUrl = e.target.result;
-        const imageUrl = "image.jpg";
+    reader.onload = async function (e) {
+        const imageUrl = e.target.result;
 
         const newPost = {
             postTitle: title,
-            photo_url: imageUrl,
+            photo_url: "",
             discription: description,
             date: new Date().toISOString()
         };
 
-        fetch('/post', {
+        var response = await fetch('/post', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newPost)
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("aq var");
-                document.getElementById('postForm').reset();
-                window.location.href = 'index.html';
-            })
-            .catch(error => {
-                console.error('Error posting data:', error);
-            });
+
+        var formData = new FormData();
+        formData.append('file', photo);
+        formData.append('title', title);
+        console.log(formData)
+        var response = await fetch('/photo',{
+            method: 'POST',
+            body: formData
+        });
+        document.getElementById('postForm').reset();
+        window.location.href = 'index.html';
     }
 
     if (fileInput.files.length > 0) {

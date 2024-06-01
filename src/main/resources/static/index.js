@@ -34,13 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
             postElement.className = 'post';
             postElement.innerHTML = `
                 <h3>${post.title}</h3>
-                <img src="${post.photo_url || 'default-image.jpg'}" alt="Post Image">
+                <img src="http://localhost:8080/${post.photo_url || 'default-image.jpg'}" alt="Post Image">
                 <p>${post.discription}</p>
                 <small>${new Date(post.date).toLocaleString()}</small>
             `;
             postsContainer.appendChild(postElement);
         });
-
         pageNumberSpan.textContent = currentPage;
         prevPageBtn.disabled = currentPage === 1;
         nextPageBtn.disabled = endIndex >= allPosts.length;

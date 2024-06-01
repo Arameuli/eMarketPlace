@@ -45,7 +45,7 @@ public class PostController {
 
     @PostMapping
     @ResponseBody
-    public PostDto addPost(@RequestBody Post post){
+    public PostDto addPostt(@RequestBody Post post){
         post.setPost_date(new Date());
         return postService.addPost(post);
     }
