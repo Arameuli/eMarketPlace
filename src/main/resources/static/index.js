@@ -1,11 +1,42 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const isGuest = urlParams.get('guest');
+    const isRegister = urlParams.get('register');
+    const isLogin = urlParams.get('login');
 
     if (isGuest === 'true') {
+        console.log("guest");
         document.querySelector('.profile-name').textContent = 'Guest';
         document.querySelector('.add-post').innerHTML = `<button onclick="window.location.href='logReg.html'">Login/Register</button>`;
+    } else if (isLogin === 'true') {
+        console.log("log In");
+        const accEmail = localStorage.getItem('logInEmail');
+        var data = new FormData();
+        data.append('login-email', accEmail);
+
+        try {
+            const response = await fetch('/acc/name', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.ok) {
+                const returnData = await response.text();
+                console.log(returnData + "-   null?")
+                document.querySelector('.profile-name').textContent = returnData;
+            } else {
+                response.text().then(text => alert(text));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
+    } else if(isRegister === 'true') {
+        console.log("register");
+        const profName = localStorage.getItem('registerUsername');
+        document.querySelector('.profile-name').textContent = profName;
     }
+
     const postsContainer = document.getElementById('postsContainer');
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
@@ -43,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             postElement.innerHTML = `
                 <h3>${post.title}</h3>
                 <img src="http://localhost:8080/${src || 'default-image.jpg'}" alt="Post Image">
-                <p>${post.discription}</p>
+                <p>${post.price}</p>
                 <small>${new Date(post.date).toLocaleString()}</small>
             `;
             postsContainer.appendChild(postElement);

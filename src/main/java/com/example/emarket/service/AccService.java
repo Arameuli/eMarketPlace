@@ -7,6 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
+import java.util.Optional;
+
 @Service
 public class AccService {
     private final AccountRepository accountRepository;
@@ -53,6 +56,16 @@ public class AccService {
             return true;
         } catch (EntityNotFoundException e) {
             return false;
+        }
+    }
+
+    public AccountDto findAccountByEmail(String email) throws AccountNotFoundException {
+        Optional<Account> accountOptional = accountRepository.findAccountByEmail(email);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            return AccountDto.fromAccount(account);
+        } else {
+            throw new AccountNotFoundException("Account with email " + email + " not found");
         }
     }
 

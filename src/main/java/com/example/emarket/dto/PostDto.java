@@ -11,6 +11,7 @@ import java.util.Date;
 public class PostDto {
     private String title;
     private String discription;
+    private String price;
     private String photo_url;
     private Date date;
 }

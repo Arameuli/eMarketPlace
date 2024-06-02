@@ -17,6 +17,7 @@ public class ModelConverter {
         return PostDto.builder()
                 .title(post.getPostTitle())
                 .discription(post.getDiscription())
+                .price(post.getPrice())
                 .photo_url(post.getPhoto_url())
                 .date(post.getPost_date())
                 .build();

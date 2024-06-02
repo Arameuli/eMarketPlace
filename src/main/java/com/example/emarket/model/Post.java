@@ -26,6 +26,9 @@ public class Post {
     @Column(name = "photo_url")
     private String photo_url;
 
+    @Column(name = "price")
+    private String price;
+
     @Column(name = "discription")
     private String discription;
 
@@ -70,5 +73,13 @@ public class Post {
 
     public void setPost_date(Date post_date) {
         this.post_date = post_date;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 @RestController
 @RequestMapping("/acc")
 public class AccController {
@@ -55,6 +57,19 @@ public class AccController {
         } else {
             return ResponseEntity.ok("Username and password are correct.");
         }
+    }
+
+    @PostMapping("/name")
+    @ResponseBody
+    public String getAccountByEmail(@RequestParam("login-email") String email){
+        try{
+            AccountDto account;
+            account = accService.findAccountByEmail(email);
+            return account.getUsername();
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
 

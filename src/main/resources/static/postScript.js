@@ -5,7 +5,8 @@ document.getElementById('postForm').addEventListener('submit', function(event) {
     const fileInput = document.getElementById('file');
     var photo=document.getElementById('file').files[0];
     const description = document.getElementById('description').value;
-
+    const price = document.getElementById('price').value;
+    console.log(price + "asdasd");
     const reader = new FileReader();
     reader.onload = async function (e) {
         const imageUrl = e.target.result;
@@ -13,6 +14,7 @@ document.getElementById('postForm').addEventListener('submit', function(event) {
         const newPost = {
             postTitle: title,
             photo_url: "",
+            price: price,
             discription: description,
             date: new Date().toISOString()
         };

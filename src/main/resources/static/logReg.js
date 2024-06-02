@@ -14,8 +14,9 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         });
 
         if (response.ok) {
+            localStorage.setItem('logInEmail', email);
             document.getElementById('loginForm').reset();
-            window.location.href = 'index.html';
+            window.location.href = 'index.html?login=true';
         } else {
             response.text().then(text => alert(text));
         }
@@ -48,8 +49,9 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         });
 
         if (response.ok) {
+            localStorage.setItem('registerUsername', username);
             document.getElementById('registerForm').reset();
-            window.location.href = 'index.html';
+            window.location.href = 'index.html?register=true';
         } else if (response.status === 409) {
             const conflictMessage = await response.text();
             if (conflictMessage.includes('Username and email')) {
