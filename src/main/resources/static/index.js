@@ -60,6 +60,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    const modal = document.getElementById('postModal');
+    const modalContent = document.getElementById('modalPostContent');
+    const closeModal = document.getElementsByClassName('close')[0];
+
+    function openModal(post) {
+        modalContent.innerHTML = `
+            <center><h3 style="margin-bottom: 30px; font-weight: bold;">${post.title}</h3>
+            <img src="http://localhost:8080/${post.photo_url}.jpg" alt="Post Image" style="margin-bottom: 25px; height: 300px; width: 200px">
+            <p>price:  ${post.price}</p>
+            <p class="borderForDes">${post.discription}</p>
+            <small>${new Date(post.date).toLocaleString()}</small></center>
+        `;
+        modal.style.display = "block";
+    }
+
+    closeModal.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
     function renderPosts() {
         postsContainer.innerHTML = '';
 
@@ -77,6 +102,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <p>${post.price}</p>
                 <small>${new Date(post.date).toLocaleString()}</small>
             `;
+            postElement.addEventListener('click', () => openModal(post));
             postsContainer.appendChild(postElement);
         });
         pageNumberSpan.textContent = currentPage;
